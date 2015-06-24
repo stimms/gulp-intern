@@ -1,10 +1,11 @@
+var path = require('path');
 var through = require('through');
 var spawn = require('child_process').spawn;
 var gutil = require('gulp-util');
 
 module.exports = function(opt) {
   opt = opt || {};
-  opt.config = opt.config || "tests/config";
+  opt.config = opt.config || 'tests/config';
   opt.workingDir = opt.workingDir || process.cwd();
 
 
@@ -13,9 +14,10 @@ module.exports = function(opt) {
   }
 
   function endStream() {
-    var child = spawn("node", [process.cwd() + "\\node_modules\\intern\\bin\\intern-client.js", "config=" + opt.config], {cwd: opt.workingDir}),
-            stdout = '',
-            stderr = '';
+    var internPath = [process.cwd(), 'node_modules', 'intern', 'bin', 'intern-client.js'].join(path.sep),
+      child = spawn('node', [internPath, 'config=' + opt.config], {cwd: opt.workingDir}),
+      stdout = '',
+      stderr = '';
 
     child.stdout.setEncoding('utf8');
 
@@ -32,8 +34,9 @@ module.exports = function(opt) {
     });
 
     child.on('close', function(code) {
-      if(code !== 0)
-        new gutil.PluginError("gulp-intern", "Tests failed");
+      if(code !== 0) {
+        new gutil.PluginError('gulp-intern', 'Tests failed');
+      }
     });
 
 
@@ -42,4 +45,4 @@ module.exports = function(opt) {
 
 
   return through(bufferContents, endStream);
-}
+};
