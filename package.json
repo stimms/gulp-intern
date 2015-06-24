@@ -1,6 +1,6 @@
 {
   "name": "gulp-intern",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Runs intern's command line runner",
   "main": "index.js",
   "scripts": {
