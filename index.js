@@ -4,9 +4,22 @@ var spawn = require('child_process').spawn;
 var gutil = require('gulp-util');
 
 module.exports = function(opt) {
+  var testRunner;
   opt = opt || {};
   opt.config = opt.config || 'tests/config';
   opt.workingDir = opt.workingDir || process.cwd();
+  opt.runType = opt.runType || 'client';
+  switch(opt.runType) {
+  case 'client':
+    testRunner = 'intern-client.js';
+    break;
+  case 'runner':
+    testRunner = 'intern-runner.js';
+    break;
+  default:
+    throw new Error('"runType" option can be only "client" or "runner"');
+  }
+
 
 
   function bufferContents(file) {
@@ -14,7 +27,7 @@ module.exports = function(opt) {
   }
 
   function endStream() {
-    var internPath = [process.cwd(), 'node_modules', 'intern', 'bin', 'intern-client.js'].join(path.sep),
+    var internPath = [process.cwd(), 'node_modules', 'intern', 'bin', testRunner].join(path.sep),
       child = spawn('node', [internPath, 'config=' + opt.config], {cwd: opt.workingDir}),
       stdout = '',
       stderr = '';

@@ -12,7 +12,11 @@ gulp.task('typescript', function(){
   gulp.src(config.typescript.input)
   .pipe(tsc())
   .pipe(gulp.dest("Scripts"))
-  .pipe(intern({config:"tests/intern", workingDir: 'Scripts' }));
+  .pipe(intern({
+    config:"tests/intern",
+    runType: "client", // defaults to "client", use "runner" if you want to run functional tests
+    workingDir: 'Scripts'
+  }));
 
 });
 
