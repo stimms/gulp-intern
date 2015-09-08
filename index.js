@@ -2,6 +2,7 @@ var path = require('path');
 var through = require('through');
 var spawn = require('child_process').spawn;
 var gutil = require('gulp-util');
+var PLUGIN_NAME = 'gulp-intern';
 
 module.exports = function(opt) {
   var testRunner;
@@ -17,7 +18,7 @@ module.exports = function(opt) {
     testRunner = 'intern-runner.js';
     break;
   default:
-    throw new Error('"runType" option can be only "client" or "runner"');
+    throw new gutil.PluginError(PLUGIN_NAME, '"runType" option can be only "client" or "runner"');
   }
 
 
@@ -48,7 +49,7 @@ module.exports = function(opt) {
 
     child.on('close', function(code) {
       if(code !== 0) {
-        new gutil.PluginError('gulp-intern', 'Tests failed');
+        new gutil.PluginError(PLUGIN_NAME, 'Tests failed');
       }
     });
 
