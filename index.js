@@ -47,16 +47,14 @@ module.exports = function(opt) {
         gutil.beep();
     });
 
-    child.on('close', function(code) {
+    var stream = this;
+    child.on('exit', function(code) {
       if(code !== 0) {
-        new gutil.PluginError(PLUGIN_NAME, 'Tests failed');
+        new gutil.PluginError(PLUGIN_NAME, 'Tests failed');        
       }
+      stream.emit('end');
     });
-
-
-    this.emit('end');
   }
-
 
   return through(bufferContents, endStream);
 };
